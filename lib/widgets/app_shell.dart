@@ -3,6 +3,8 @@ import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../screens/vehicle_list_screen.dart';
 import '../screens/vehicle_form_screen.dart';
+import '../screens/driver_management_screen.dart';
+import '../screens/fleet_operations_screen.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -18,6 +20,8 @@ class _AppShellState extends State<AppShell> {
   final List<Widget> _screens = const [
     VehicleListScreen(),
     VehicleFormScreen(),
+    DriverManagementScreen(),
+    FleetOperationsScreen(),
   ];
 
   @override
@@ -45,7 +49,6 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
-    // Session Guard: If not authenticated, ensure navigation back to login
     if (!_auth.isAuthenticated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
@@ -133,15 +136,22 @@ class _AppShellState extends State<AppShell> {
                 selectedIcon: Icon(Icons.add_circle_rounded),
                 label: Text('Register Vehicle'),
               ),
+              NavigationRailDestination(
+                icon: Icon(Icons.badge_outlined),
+                selectedIcon: Icon(Icons.badge_rounded),
+                label: Text('Drivers & Assign'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.analytics_outlined),
+                selectedIcon: Icon(Icons.analytics_rounded),
+                label: Text('Operations & Docs'),
+              ),
             ],
-            // Fixed: Do NOT use Expanded inside NavigationRail.trailing!
-            // NavigationRail uses trailingAtBottom: true to place trailing at the bottom safely.
             trailing: Padding(
               padding: const EdgeInsets.only(bottom: 24, left: 12, right: 12),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Active user profile badge
                   if (isWide && currentUser != null) ...[
                     Container(
                       width: 200,
